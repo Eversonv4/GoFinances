@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text } from "react-native";
 
-export function SplashScreen() {
+export function LoadingPage() {
   return (
-    <View>
-      <Text>title</Text>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>Carregando...</Text>
     </View>
   );
 }
