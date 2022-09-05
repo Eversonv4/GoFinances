@@ -1,7 +1,8 @@
 import React from "react";
 import {
-  Header,
   Container,
+  Header,
+  UserWrapper,
   UserInfo,
   Photo,
   User,
@@ -13,13 +14,15 @@ export function Dashboard() {
   return (
     <Container>
       <Header>
-        <UserInfo>
-          <Photo source={require("@assets/everson.jpg")} />
-          <User>
-            <UserGreeting>Olá,</UserGreeting>
-            <UserName>Everson</UserName>
-          </User>
-        </UserInfo>
+        <UserWrapper>
+          <UserInfo>
+            <Photo source={require("@assets/everson.jpg")} />
+            <User>
+              <UserGreeting>Olá,</UserGreeting>
+              <UserName>Everson</UserName>
+            </User>
+          </UserInfo>
+        </UserWrapper>
       </Header>
     </Container>
   );

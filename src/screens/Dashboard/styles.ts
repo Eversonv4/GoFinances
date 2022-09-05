@@ -13,6 +13,13 @@ export const Header = styled.View`
 
   justify-content: center;
   align-items: center;
+  flex-direction: row;
+`;
+
+export const UserWrapper = styled.View`
+  background: green;
+  width: 100%;
+  padding: 0 24px;
 `;
 
 export const UserInfo = styled.View`
@@ -20,17 +27,22 @@ export const UserInfo = styled.View`
   align-items: center;
 `;
 export const Photo = styled.Image`
-  width: ${RFValue(55)}px;
-  height: ${RFValue(55)}px;
+  width: ${RFValue(48)}px;
+  height: ${RFValue(48)}px;
   border-radius: 10px;
 `;
 export const User = styled.View`
-  width: ${RFValue(55)}px;
-  height: ${RFValue(55)}px;
-  align-items: flex-start;
-  justify-content: center;
-
-  background-color: blue;
+  margin-left: ${RFValue(17)}px;
 `;
-export const UserGreeting = styled.Text``;
-export const UserName = styled.Text``;
+export const UserGreeting = styled.Text`
+  color: ${({ theme }) => theme.colors.shape};
+
+  font-size: ${RFValue(18)}px;
+  font-family: ${({ theme }) => theme.fonts.regular};
+`;
+export const UserName = styled.Text`
+  color: ${({ theme }) => theme.colors.shape};
+
+  font-size: ${RFValue(18)}px;
+  font-family: ${({ theme }) => theme.fonts.bold};
+`;
