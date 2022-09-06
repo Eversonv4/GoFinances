@@ -11,7 +11,8 @@ import {
 } from "@expo-google-fonts/poppins";
 import * as SplashScreen from "expo-splash-screen";
 
-import { Dashboard } from "@screens/Dashboard/";
+import { Dashboard } from "@screens/Dashboard";
+import { Register } from "@screens/Register";
 import Theme from "@global/styles/theme";
 
 SplashScreen.preventAutoHideAsync();
@@ -29,7 +30,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={Theme}>
-      <Dashboard />
+      <Register />
     </ThemeProvider>
   );
 }
