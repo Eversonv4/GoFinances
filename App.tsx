@@ -1,5 +1,4 @@
 import React from "react";
-import { View, Text } from "react-native";
 import { ThemeProvider } from "styled-components";
 import { LoadingPage } from "@components/SplashScreen";
 
@@ -31,7 +30,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={Theme}>
-      <CategorySelect />
+      <Register />
     </ThemeProvider>
   );
 }

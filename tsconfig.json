@@ -7,7 +7,8 @@
       "@screens/*": ["./src/screens/*"],
       "@components/*": ["./src/components/*"],
       "@global/*": ["./src/global/*"],
-      "@assets/*": ["./src/assets/*"]
+      "@assets/*": ["./src/assets/*"],
+      "@utils/*": ["./src/utils/*"]
     },
     "plugins": [
       {
