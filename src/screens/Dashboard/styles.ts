@@ -8,8 +8,6 @@ import {
   getBottomSpace,
 } from "react-native-iphone-x-helper";
 
-import { DataListProps } from ".";
-
 export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
@@ -24,6 +22,10 @@ export const Header = styled.View`
   align-items: flex-start;
   flex-direction: row;
 `;
+
+export const LogoutButton = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.3,
+})``;
 
 export const UserWrapper = styled.View`
   width: 100%;
