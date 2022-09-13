@@ -15,6 +15,9 @@ import Theme from "@global/styles/theme";
 import { NavigationContainer } from "@react-navigation/native";
 import { AppRoutes } from "@routes/app.routes";
 
+import "intl";
+import "intl/locale-data/jsonp/pt-BR";
+
 SplashScreen.preventAutoHideAsync();
 export default function App() {
   const [fontsLoaded] = useFonts({
