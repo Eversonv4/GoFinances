@@ -6,6 +6,7 @@ import { Feather } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Dashboard } from "@screens/Dashboard";
 import { Register } from "@screens/Register";
+import { ResumePage } from "@screens/Resume";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -45,7 +46,7 @@ export function AppRoutes() {
       />
       <Screen
         name="Resumo"
-        component={Register}
+        component={ResumePage}
         options={{
           tabBarIcon: ({ size, color }) => (
             <Feather name="pie-chart" size={size} color={color} />
