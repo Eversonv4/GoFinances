@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { ActivityIndicator } from "react-native";
 import {
   Container,
   Header,
@@ -14,6 +15,7 @@ import {
   Title,
   TransactionList,
   LogoutButton,
+  LoadingPage,
 } from "./styles";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -36,16 +38,38 @@ interface ItemDataListProps extends DataListProps {
 }
 
 interface HighlightDataProps {
-  entries: string;
+  income: string;
   expenses: string;
   total: string;
+  lastIncomeDate: string;
+  lastExpensesDate: string;
+  intervalExpensesDate: string;
 }
 
 export function Dashboard() {
+  const [loading, setLoading] = useState(true);
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
   const [highlightData, setHighlightData] = useState<HighlightDataProps>(
     {} as HighlightDataProps
   );
+
+  function getLastTransactionDate(
+    collection: DataListProps[],
+    transactionType: "up" | "down"
+  ) {
+    const lastTransaction = Math.max.apply(
+      Math,
+      collection
+        .filter((item) => item.transactionType === transactionType)
+        .map((transaction) => new Date(transaction.date).getTime())
+    );
+
+    return Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      // year: "2-digit",
+    }).format(new Date(lastTransaction));
+  }
 
   async function LoadTransactions() {
     const dataKey = "@gofinances:transactions";
@@ -110,13 +134,25 @@ export function Dashboard() {
       }
     );
 
+    setTransactions(transactionsFormatted);
+
+    const lastTransactionIncome = getLastTransactionDate(transactions, "up");
+    const lastTransactionExpenses = getLastTransactionDate(
+      transactions,
+      "down"
+    );
+    const intervalTransactionsDate = `01 a ${lastTransactionExpenses}`;
+
     setHighlightData({
-      entries: formattedLastIncome,
+      income: formattedLastIncome,
       expenses: formattedExpensesTotal,
       total: formattedTotalAmount,
+      lastIncomeDate: `Última entrada dia ${lastTransactionIncome}`,
+      lastExpensesDate: `Última saída dia ${lastTransactionExpenses}`,
+      intervalExpensesDate: intervalTransactionsDate,
     });
 
-    setTransactions(transactionsFormatted);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -131,54 +167,62 @@ export function Dashboard() {
 
   return (
     <Container>
-      <Header>
-        <UserWrapper>
-          <UserInfo>
-            <Photo source={require("@assets/everson.jpg")} />
-            <User>
-              <UserGreeting>Olá,</UserGreeting>
-              <UserName>Everson</UserName>
-            </User>
-          </UserInfo>
+      {loading ? (
+        <LoadingPage>
+          <ActivityIndicator color="red" size="large" />
+        </LoadingPage>
+      ) : (
+        <>
+          <Header>
+            <UserWrapper>
+              <UserInfo>
+                <Photo source={require("@assets/everson.jpg")} />
+                <User>
+                  <UserGreeting>Olá,</UserGreeting>
+                  <UserName>Everson</UserName>
+                </User>
+              </UserInfo>
 
-          <LogoutButton onPress={() => {}}>
-            <Icon name="power" />
-          </LogoutButton>
-        </UserWrapper>
-      </Header>
+              <LogoutButton onPress={() => {}}>
+                <Icon name="power" />
+              </LogoutButton>
+            </UserWrapper>
+          </Header>
 
-      <HighlightCards>
-        <HighlightCard
-          type="up"
-          title="Entradas"
-          amount={highlightData.entries}
-          lastTransation="Última entrada dia 13 de abril"
-        />
-        <HighlightCard
-          type="down"
-          title="Saídas"
-          amount={highlightData.expenses}
-          lastTransation="Última saída dia 03 de abril"
-        />
-        <HighlightCard
-          type="total"
-          title="Total"
-          amount={highlightData.total}
-          lastTransation="01 a 16 de abril"
-        />
-      </HighlightCards>
+          <HighlightCards>
+            <HighlightCard
+              type="up"
+              title="Entradas"
+              amount={highlightData.income}
+              lastTransation={highlightData.lastIncomeDate}
+            />
+            <HighlightCard
+              type="down"
+              title="Saídas"
+              amount={highlightData.expenses}
+              lastTransation={highlightData.lastExpensesDate}
+            />
+            <HighlightCard
+              type="total"
+              title="Total"
+              amount={highlightData.total}
+              lastTransation={highlightData.intervalExpensesDate}
+            />
+          </HighlightCards>
 
-      <Transactions>
-        <Title>Listagem</Title>
+          <Transactions>
+            <Title>Listagem</Title>
 
-        <TransactionList
-          data={transactions}
-          keyExtractor={(item: DataListProps) => item.id}
-          renderItem={({ item }: ItemDataListProps) => (
-            <TransactionCard data={item} />
-          )}
-        />
-      </Transactions>
+            <TransactionList
+              data={transactions}
+              keyExtractor={(item: DataListProps) => item.id}
+              renderItem={({ item }: ItemDataListProps) => (
+                <TransactionCard data={item} />
+              )}
+            />
+          </Transactions>
+        </>
+      )}
     </Container>
   );
 }

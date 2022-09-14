@@ -99,3 +99,9 @@ export const TransactionList = styled.FlatList.attrs({
     paddingBottom: Platform.OS === "ios" ? getBottomSpace() : 0,
   },
 })``;
+
+export const LoadingPage = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
