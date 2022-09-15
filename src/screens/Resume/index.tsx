@@ -1,15 +1,33 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { ScrollView } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+
+import { ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { HistoryCard } from "@components/HistoryCard";
-import { Container, Header, Title, Content, ChartContainer } from "./styles";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+
+import {
+  Container,
+  Header,
+  Title,
+  Content,
+  ChartContainer,
+  MonthSelect,
+  MonthSelectButton,
+  MonthSelectIcon,
+  Month,
+  LoadingPage,
+  EmptyTrasactionContainer,
+  EmptyTrasactionText,
+} from "./styles";
 import { DataListProps } from "@screens/Dashboard";
 import { categories } from "@utils/categories";
 
 import { VictoryPie } from "victory-native";
-import { useFocusEffect } from "@react-navigation/native";
 import { RFValue } from "react-native-responsive-fontsize";
+import { addMonths, subMonths, format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { HistoryCard } from "@components/HistoryCard";
 
 import { useTheme } from "styled-components";
 
@@ -23,18 +41,34 @@ interface TotalByCategoryProps {
 }
 
 export function ResumePage() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [totalByCategories, setTotalByCategories] =
     useState<TotalByCategoryProps[]>();
 
   const theme = useTheme();
 
+  function handleDateChange(action: "next" | "back") {
+    if (action === "next") {
+      const newDate = addMonths(selectedDate, 1);
+      setSelectedDate(newDate);
+    } else {
+      const newDate = subMonths(selectedDate, 1);
+      setSelectedDate(newDate);
+    }
+  }
+
   async function LoadData() {
+    setIsLoading(true);
     const dataKey = "@gofinances:transactions";
     const response = await AsyncStorage.getItem(dataKey);
     const responseFormatted = response ? JSON.parse(response) : [];
 
     const expenses = responseFormatted.filter(
-      (expense: DataListProps) => expense.transactionType === "down"
+      (expense: DataListProps) =>
+        expense.transactionType === "down" &&
+        new Date(expense.date).getMonth() === selectedDate.getMonth() &&
+        new Date(expense.date).getFullYear() === selectedDate.getFullYear()
     );
 
     const expensesTotal = expenses.reduce(
@@ -75,16 +109,13 @@ export function ResumePage() {
     });
 
     setTotalByCategories(totalByCategory);
+    setIsLoading(false);
   }
-
-  useEffect(() => {
-    LoadData();
-  }, []);
 
   useFocusEffect(
     useCallback(() => {
       LoadData();
-    }, [])
+    }, [selectedDate])
   );
 
   return (
@@ -92,28 +123,59 @@ export function ResumePage() {
       <Header>
         <Title>Resumo por categoria</Title>
       </Header>
+      {isLoading ? (
+        <LoadingPage>
+          <ActivityIndicator color="red" size="large" />
+        </LoadingPage>
+      ) : (
+        <Content
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingHorizontal: 24,
+            paddingBottom: useBottomTabBarHeight(),
+          }}
+        >
+          <MonthSelect>
+            <MonthSelectButton onPress={() => handleDateChange("back")}>
+              <MonthSelectIcon name="chevron-left" />
+            </MonthSelectButton>
 
-      <Content>
-        <ChartContainer>
-          {totalByCategories && (
-            <VictoryPie
-              data={totalByCategories}
-              colorScale={totalByCategories.map((category) => category.color)}
-              style={{
-                labels: {
-                  fontSize: RFValue(18),
-                  fontWeight: "bold",
-                  fill: theme.colors.shape,
-                },
-              }}
-              labelRadius={99}
-              x="totalPercentage"
-              y="total"
-            />
+            <Month>
+              {format(selectedDate, "MMMM, yyyy", { locale: ptBR })}
+            </Month>
+
+            <MonthSelectButton onPress={() => handleDateChange("next")}>
+              <MonthSelectIcon name="chevron-right" />
+            </MonthSelectButton>
+          </MonthSelect>
+
+          {totalByCategories?.length === 0 && (
+            <EmptyTrasactionContainer>
+              <EmptyTrasactionText>
+                Não temos transações nesse período
+              </EmptyTrasactionText>
+            </EmptyTrasactionContainer>
           )}
-        </ChartContainer>
 
-        <ScrollView>
+          <ChartContainer>
+            {totalByCategories && (
+              <VictoryPie
+                data={totalByCategories}
+                colorScale={totalByCategories.map((category) => category.color)}
+                style={{
+                  labels: {
+                    fontSize: RFValue(18),
+                    fontWeight: "bold",
+                    fill: theme.colors.shape,
+                  },
+                }}
+                labelRadius={99}
+                x="totalPercentage"
+                y="total"
+              />
+            )}
+          </ChartContainer>
+
           {totalByCategories &&
             totalByCategories.map((item) => (
               <HistoryCard
@@ -123,8 +185,8 @@ export function ResumePage() {
                 amount={item.totalFormatted}
               />
             ))}
-        </ScrollView>
-      </Content>
+        </Content>
+      )}
     </Container>
   );
 }

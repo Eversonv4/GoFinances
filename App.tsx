@@ -1,4 +1,5 @@
 import React from "react";
+import { StatusBar } from "react-native";
 import { ThemeProvider } from "styled-components";
 import { LoadingPage } from "@components/SplashScreen";
 
@@ -34,6 +35,7 @@ export default function App() {
   return (
     <ThemeProvider theme={Theme}>
       <NavigationContainer>
+        <StatusBar barStyle="light-content" />
         <AppRoutes />
       </NavigationContainer>
     </ThemeProvider>

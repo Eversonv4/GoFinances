@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
-import { ScrollView } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
+import { Feather } from "@expo/vector-icons";
 
 export const Container = styled.View`
   flex: 1;
@@ -24,11 +25,44 @@ export const Title = styled.Text`
   font-family: ${({ theme }) => theme.fonts.regular};
 `;
 
-export const Content = styled(ScrollView).attrs({
-  contentContainerStyle: { flex: 1, padding: 24 },
-})``;
+export const Content = styled(ScrollView)``;
 
 export const ChartContainer = styled.View`
   width: 100%;
+  align-items: center;
+`;
+
+export const MonthSelect = styled.View`
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+`;
+
+export const MonthSelectButton = styled(TouchableOpacity)``;
+
+export const MonthSelectIcon = styled(Feather)`
+  font-size: ${RFValue(24)}px;
+`;
+
+export const Month = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.regular};
+  font-size: ${RFValue(20)}px;
+`;
+
+export const EmptyTrasactionContainer = styled.View`
+  align-items: center;
+  margin-top: 150px;
+`;
+
+export const EmptyTrasactionText = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.regular};
+  font-size: ${RFValue(14)}px;
+`;
+
+export const LoadingPage = styled.View`
+  flex: 1;
+  justify-content: center;
   align-items: center;
 `;
