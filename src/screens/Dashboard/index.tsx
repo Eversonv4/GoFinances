@@ -28,6 +28,8 @@ import {
 
 import { useFocusEffect } from "@react-navigation/native";
 
+import { useAuth } from "@hooks/auth";
+
 export interface DataListProps extends TransactionCardProps {
   id: string;
   transactionType?: string;
@@ -52,6 +54,8 @@ export function Dashboard() {
   const [highlightData, setHighlightData] = useState<HighlightDataProps>(
     {} as HighlightDataProps
   );
+
+  const { user } = useAuth();
 
   function getLastTransactionDate(
     collection: DataListProps[],
@@ -176,10 +180,10 @@ export function Dashboard() {
           <Header>
             <UserWrapper>
               <UserInfo>
-                <Photo source={require("@assets/everson.jpg")} />
+                <Photo source={{ uri: `${user.photo}` }} />
                 <User>
                   <UserGreeting>Olá,</UserGreeting>
-                  <UserName>Everson</UserName>
+                  <UserName>{user.name}</UserName>
                 </User>
               </UserInfo>
 

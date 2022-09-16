@@ -13,11 +13,10 @@ import GoogleSvg from "@assets/google-icon.svg";
 import LogoSvg from "@assets/logo.svg";
 import { RFValue } from "react-native-responsive-fontsize";
 import { SignInSocialButton } from "@components/SignInSocialButton";
-import { AuthContext } from "@hooks/auth";
+import { useAuth } from "@hooks/auth";
 
 export function SignIn() {
-  const data = useContext(AuthContext);
-  console.log(data);
+  const { user } = useAuth();
 
   return (
     <Container>

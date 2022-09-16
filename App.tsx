@@ -20,7 +20,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { AppRoutes } from "@routes/app.routes";
 import { SignIn } from "@screens/SignIn";
 
-import { AuthContext } from "@hooks/auth";
+import { AuthProvider } from "@hooks/auth";
 
 SplashScreen.preventAutoHideAsync();
 export default function App() {
@@ -39,10 +39,10 @@ export default function App() {
     <ThemeProvider theme={Theme}>
       <NavigationContainer>
         <StatusBar barStyle="light-content" />
-        <AuthContext.Provider value={["Deus ajuda o meu denguinho!"]}>
+        <AuthProvider>
           <SignIn />
           {/* <AppRoutes /> */}
-        </AuthContext.Provider>
+        </AuthProvider>
       </NavigationContainer>
     </ThemeProvider>
   );
