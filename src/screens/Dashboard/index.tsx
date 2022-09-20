@@ -109,6 +109,9 @@ export function Dashboard() {
           year: "2-digit",
         }).format(new Date(item.date));
 
+        console.log("Amount ", amount);
+        console.log("Date ", date);
+
         return {
           id: item.id,
           name: item.name,

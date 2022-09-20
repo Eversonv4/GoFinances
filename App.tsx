@@ -3,6 +3,7 @@ import { StatusBar } from "react-native";
 import { ThemeProvider } from "styled-components";
 import { LoadingPage } from "@components/SplashScreen";
 
+import "react-native-gesture-handler";
 import "intl";
 import "intl/locale-data/jsonp/pt-BR";
 
@@ -17,8 +18,8 @@ import * as SplashScreen from "expo-splash-screen";
 import Theme from "@global/styles/theme";
 
 import { NavigationContainer } from "@react-navigation/native";
+import { Routes } from "./src/routes";
 import { AppRoutes } from "@routes/app.routes";
-import { SignIn } from "@screens/SignIn";
 
 import { AuthProvider } from "@hooks/auth";
 
@@ -37,11 +38,10 @@ export default function App() {
 
   return (
     <ThemeProvider theme={Theme}>
+      <StatusBar barStyle="light-content" />
       <NavigationContainer>
-        <StatusBar barStyle="light-content" />
         <AuthProvider>
-          <SignIn />
-          {/* <AppRoutes /> */}
+          <AppRoutes />
         </AuthProvider>
       </NavigationContainer>
     </ThemeProvider>

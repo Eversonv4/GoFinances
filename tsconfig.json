@@ -17,6 +17,7 @@
         "name": "typescript-styled-plugin",
         "tags": ["styled", "css", "sty"]
       }
-    ]
+    ],
+    "typeRoots": ["./src/@types/env"]
   }
 }
